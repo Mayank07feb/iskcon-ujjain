@@ -334,7 +334,7 @@ export default function HomePage() {
                       />
                     </svg>
                     <h4 className="text-xl font-bold mb-2">Yes, I have</h4>
-                    <p className="text-gray-600">₹300 per night</p>
+                  
                   </button>
                   <button
                     onClick={() => handlePatronSelect("no")}
@@ -354,7 +354,7 @@ export default function HomePage() {
                       />
                     </svg>
                     <h4 className="text-xl font-bold mb-2">No, I don't</h4>
-                    <p className="text-gray-600">₹500 per night</p>
+               
                   </button>
                 </div>
               </div>
@@ -402,8 +402,8 @@ export default function HomePage() {
                           checkin: e.target.value,
                         }))
                       }
-                    //   min="2025-10-06"
-                    //   max="2025-10-09"
+                        min="2025-10-06"
+                        max="2025-10-09"
                       className="border-2 border-gray200 rounded-xl p-4 w-full focus:border-primaryOrange focus:outline-none transition-colors"
                     />
                   </div>
@@ -420,8 +420,8 @@ export default function HomePage() {
                           checkout: e.target.value,
                         }))
                       }
-                    //   min="2025-10-06"
-                    //   max="2025-10-09"
+                        min="2025-10-06"
+                        max="2025-10-09"
                       className="border-2 border-gray200 rounded-xl p-4 w-full focus:border-primaryOrange focus:outline-none transition-colors"
                     />
                   </div>
@@ -540,10 +540,53 @@ export default function HomePage() {
                       <span className="font-semibold">Patron Status:</span>{" "}
                       {patronStatus === "yes" ? "Yes" : "No"}
                     </p>
-                    <div className="pt-4 mt-4 border-t border-gray-300">
+                    <div className="pt-4 mt-4 border-t border-gray-300 flex items-center justify-between">
+                      {/* Total */}
                       <p className="text-2xl font-bold text-primaryOrange">
                         Total: ₹{calculateTotal()}
                       </p>
+
+                      {/* Number of Guests with + / - buttons */}
+                      <div className="flex flex-col">
+                        <label className="block text-gray700 font-semibold mb-2 text-sm">
+                          Additional Members
+                        </label>
+                        <div className="flex items-center border-2 border-gray-200 rounded-xl overflow-hidden w-40">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                guests: Math.max(1, (prev.guests || 1) - 1),
+                              }))
+                            }
+                            className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors"
+                          >
+                            -
+                          </button>
+                          <input
+                            type="number"
+                            name="guests"
+                            value={formData.guests}
+                            onChange={handleInputChange}
+                            min="1"
+                            className="w-full text-center p-4 focus:outline-none"
+                            required
+                          />
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                guests: (prev.guests || 1) + 1,
+                              }))
+                            }
+                            className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -597,18 +640,19 @@ export default function HomePage() {
                       />
                     </div>
 
+                    {/* New Aadhaar ID Field */}
                     <div className="relative">
                       <label className="block text-gray700 font-semibold mb-2">
-                        Number of Guests *
+                        Aadhaar ID *
                       </label>
                       <input
-                        type="number"
-                        name="guests"
-                        value={formData.guests}
+                        type="text"
+                        name="aadhaar"
+                        value={formData.aadhaar}
                         onChange={handleInputChange}
-                        placeholder="2"
-                        min="1"
+                        placeholder="Enter Aadhaar Number"
                         required
+                        maxLength={12}
                         className="border-2 border-gray200 rounded-xl p-4 w-full focus:border-primaryOrange focus:outline-none transition-colors"
                       />
                     </div>
@@ -677,7 +721,8 @@ export default function HomePage() {
                           text: "Stay includes patron, spouse, children under 18, and dependent parents over 60",
                         },
                         {
-                          iconPath: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
+                          iconPath:
+                            "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
                           color: "text-red",
                           text: "All stays require advance reservation and are subject to room availability",
                         },
@@ -803,8 +848,6 @@ export default function HomePage() {
             ))}
           </div>
         </section>
-
-
 
         {/* Contact & Temple Info Section */}
         <section className="py-24 px-6 lg:px-8 bg-gradient-to-b from-footerBg to-primaryOrangeDark text-white">
