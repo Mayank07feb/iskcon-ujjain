@@ -422,7 +422,6 @@ export default function HomePage() {
                       }
                     //   min="2025-10-06"
                     //   max="2025-10-09"
-                    
                       className="border-2 border-gray200 rounded-xl p-4 w-full focus:border-primaryOrange focus:outline-none transition-colors"
                     />
                   </div>
