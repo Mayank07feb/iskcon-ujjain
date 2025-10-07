@@ -27,10 +27,14 @@ export default function HomePage() {
     email: "",
     phone: "",
     guests: 1,
+    member: 0,
     roomType: "",
-    aadhaar: "",
+    idType: "",
+    idNumber: "",
   });
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [agreedTerms, setAgreedTerms] = useState(false);
+
   const [selectedRoomDetails, setSelectedRoomDetails] = useState(null);
   const [errorModal, setErrorModal] = useState({
     show: false,
@@ -297,7 +301,8 @@ export default function HomePage() {
       (checkoutDate - checkinDate) / (1000 * 60 * 60 * 24)
     );
     const guests = formData.guests || 1;
-    return basePrice * nights * guests;
+    const members = formData.member || 0;
+    return basePrice * nights * (guests + members);
   };
 
   const calculateNights = () => {
@@ -309,6 +314,14 @@ export default function HomePage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!agreedTerms) {
+      setErrorModal({
+        show: true,
+        title: "Terms & Conditions",
+        message: "Please agree to the Terms & Conditions to proceed with your booking.",
+      });
+      return;
+    }
     setShowSuccessModal(true);
   };
 
@@ -323,9 +336,12 @@ export default function HomePage() {
       email: "",
       phone: "",
       guests: 1,
+      member: 0,
       roomType: "",
-      aadhaar: "",
+      idType: "",
+      idNumber: "",
     });
+    setAgreedTerms(false);
   };
 
   const resetBooking = () => {
@@ -338,9 +354,12 @@ export default function HomePage() {
       email: "",
       phone: "",
       guests: 1,
+      member: 0,
       roomType: "",
-      aadhaar: "",
+      idType: "",
+      idNumber: "",
     });
+    setAgreedTerms(false);
   };
 
   const patronBenefits = [
@@ -459,8 +478,8 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-center">
                   <div className="bg-black/50 backdrop-blur-sm px-3 py-2 sm:px-4 sm:py-2 rounded-lg">
-                    <p className="font-semibold text-sm sm:text-base">Click to view gallery</p>
-                    <p className="text-xs sm:text-sm">{images.length} images available</p>
+                    {/* <p className="font-semibold text-sm sm:text-base">Click to view gallery</p>
+                    <p className="text-xs sm:text-sm">{images.length} images available</p> */}
                   </div>
                 </div>
               </div>
@@ -666,11 +685,16 @@ export default function HomePage() {
                       {formData.guests}
                     </span>
                   </div>
-
                   <div className="flex justify-between flex-wrap">
-                    <span className="text-gray-600">Aadhaar ID:</span>
+                    <span className="text-gray-600">Additional Members:</span>
                     <span className="font-medium text-gray-800">
-                      {formData.aadhaar}
+                      {formData.member}
+                    </span>
+                  </div>
+                  <div className="flex justify-between flex-wrap">
+                    <span className="text-gray-600">{formData.idType} Number:</span>
+                    <span className="font-medium text-gray-800">
+                      {formData.idNumber}
                     </span>
                   </div>
 
@@ -836,9 +860,6 @@ export default function HomePage() {
                   >
                     <CheckCircleIcon className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-3 sm:mb-4 text-orange-500" />
                     <h4 className="text-lg sm:text-xl md:text-xl font-bold mb-1 sm:mb-2 text-center">Yes, I have</h4>
-                    {/* <p className="text-xs sm:text-sm text-gray-600 text-center">
-                      Get special discounted rates
-                    </p> */}
                   </button>
                   <button
                     onClick={() => handlePatronSelect("no")}
@@ -846,9 +867,6 @@ export default function HomePage() {
                   >
                     <XMarkIcon className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-3 sm:mb-4 text-gray-500" />
                     <h4 className="text-lg sm:text-xl md:text-xl font-bold mb-1 sm:mb-2 text-center">No, I don't</h4>
-                    {/* <p className="text-xs sm:text-sm text-gray-600 text-center">
-                      Standard rates apply
-                    </p> */}
                   </button>
                 </div>
               </div>
@@ -1097,7 +1115,7 @@ export default function HomePage() {
                               onClick={() =>
                                 setFormData((prev) => ({
                                   ...prev,
-                                  guests: Math.max(1, (prev.guests || 1) - 1),
+                                  member: Math.max(0, (prev.member || 0) - 1),
                                 }))
                               }
                               className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors text-sm sm:text-base"
@@ -1106,19 +1124,18 @@ export default function HomePage() {
                             </button>
                             <input
                               type="number"
-                              name="guests"
-                              value={formData.guests}
+                              name="member"
+                              value={formData.member}
                               onChange={handleInputChange}
-                              min="1"
+                              min="0"
                               className="w-full text-center p-2 sm:p-3 focus:outline-none text-sm sm:text-base"
-                              required
                             />
                             <button
                               type="button"
                               onClick={() =>
                                 setFormData((prev) => ({
                                   ...prev,
-                                  guests: (prev.guests || 1) + 1,
+                                  member: (prev.member || 0) + 1,
                                 }))
                               }
                               className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors text-sm sm:text-base"
@@ -1181,26 +1198,66 @@ export default function HomePage() {
                     </div>
                     <div>
                       <label className="block text-gray-700 font-semibold mb-1 sm:mb-2 text-sm sm:text-base">
-                        Aadhaar ID *
+                        ID Type *
                       </label>
-                      <input
-                        type="text"
-                        name="aadhaar"
-                        value={formData.aadhaar}
+                      <select
+                        name="idType"
+                        value={formData.idType}
                         onChange={handleInputChange}
-                        placeholder="Enter Aadhaar Number"
                         required
-                        maxLength={12}
                         className="border-2 border-gray-200 rounded-lg sm:rounded-xl p-3 sm:p-4 w-full focus:border-orange-500 focus:outline-none transition-colors text-sm sm:text-base"
-                      />
+                      >
+                        <option value="">Select ID Type</option>
+                        <option value="Aadhar">Aadhar</option>
+                        <option value="PAN">PAN</option>
+                        <option value="Passport">Passport</option>
+                        <option value="DL">Driving License</option>
+                        <option value="LifePatron">Life Patron Card</option>
+                      </select>
                     </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-gray-700 font-semibold mb-1 sm:mb-2 text-sm sm:text-base">
+                      {formData.idType || 'ID'} Number *
+                    </label>
+                    <input
+                      type="text"
+                      name="idNumber"
+                      value={formData.idNumber}
+                      onChange={handleInputChange}
+                      placeholder={`Enter ${formData.idType || 'ID'} Number`}
+                      required
+                      className="border-2 border-gray-200 rounded-lg sm:rounded-xl p-3 sm:p-4 w-full focus:border-orange-500 focus:outline-none transition-colors text-sm sm:text-base"
+                    />
+                  </div>
+
+                  {/* Terms & Conditions Checkbox */}
+                  <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg sm:rounded-xl">
+                    <input
+                      type="checkbox"
+                      id="agreeTerms"
+                      checked={agreedTerms}
+                      onChange={(e) => setAgreedTerms(e.target.checked)}
+                      required
+                      className="mt-1 w-4 h-4 sm:w-5 sm:h-5 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 focus:ring-2"
+                    />
+                    <label htmlFor="agreeTerms" className="text-gray-700 text-xs sm:text-sm leading-relaxed">
+                      I agree to the Terms & Conditions and understand that this booking is subject to 
+                      availability confirmation. I confirm that all provided information is accurate.
+                    </label>
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold py-3 sm:py-4 md:py-5 rounded-lg sm:rounded-xl shadow-lg sm:shadow-xl hover:shadow-2xl hover:shadow-orange-500/50 hover:scale-[1.02] transition-all duration-300 text-sm sm:text-base"
+                    disabled={!agreedTerms}
+                    className={`w-full font-bold py-3 sm:py-4 md:py-5 rounded-lg sm:rounded-xl shadow-lg sm:shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 text-sm sm:text-base ${
+                      agreedTerms 
+                        ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:shadow-orange-500/50 cursor-pointer'
+                        : 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                    }`}
                   >
-                    Confirm Booking
+                    {agreedTerms ? 'Confirm Booking' : 'Please Accept Terms & Conditions'}
                   </button>
                 </form>
               </div>
