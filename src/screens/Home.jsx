@@ -478,8 +478,8 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-center">
                   <div className="bg-black/50 backdrop-blur-sm px-3 py-2 sm:px-4 sm:py-2 rounded-lg">
-                    {/* <p className="font-semibold text-sm sm:text-base">Click to view gallery</p>
-                    <p className="text-xs sm:text-sm">{images.length} images available</p> */}
+                    <p className="font-semibold text-sm sm:text-base">Click to view gallery</p>
+                    <p className="text-xs sm:text-sm">{images.length} images available</p>
                   </div>
                 </div>
               </div>
