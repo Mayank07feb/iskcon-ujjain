@@ -34,6 +34,7 @@ export default function HomePage() {
   });
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [agreedTerms, setAgreedTerms] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
 
   const [selectedRoomDetails, setSelectedRoomDetails] = useState(null);
   const [errorModal, setErrorModal] = useState({
@@ -592,6 +593,113 @@ export default function HomePage() {
     <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-orange-50">
       <Lightbox />
       
+      {/* Terms & Conditions Modal */}
+      {showTermsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-3 sm:p-4">
+          <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl sm:shadow-2xl w-full max-w-2xl sm:max-w-3xl md:max-w-4xl max-h-[90vh] overflow-hidden mx-2 sm:mx-4 transform animate-scale-in">
+            {/* Header */}
+            <div className="bg-orange-500 text-white p-4 sm:p-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl sm:text-2xl font-bold">Terms & Conditions</h3>
+                <button
+                  onClick={() => setShowTermsModal(false)}
+                  className="p-1 hover:bg-orange-600 rounded-full transition-colors"
+                >
+                  <XMarkIcon className="w-6 h-6 sm:w-7 sm:h-7" />
+                </button>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="p-4 sm:p-6 max-h-[60vh] overflow-y-auto">
+              <div className="space-y-4 sm:space-y-6 text-sm sm:text-base text-gray-700">
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">Guest Restrictions</h4>
+                  <ul className="list-disc list-inside space-y-1 ml-2">
+                    <li>Unmarried couples are not allowed</li>
+                    <li>Guests below 18 years of age are allowed</li>
+                    <li>Suitable for children</li>
+                    <li>Taking extra mattress is compulsory for child of age 8 or above</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">ID Proof Requirements</h4>
+                  <ul className="list-disc list-inside space-y-1 ml-2">
+                    <li><strong>Accepted:</strong> Passport, Aadhar, Driving License and Govt. ID</li>
+                    <li><strong>Not Accepted:</strong> Office ID, PAN Card and Non-Govt IDs</li>
+                    <li>Local IDs not allowed</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">Food & Dining</h4>
+                  <ul className="list-disc list-inside space-y-1 ml-2">
+                    <li>Non-veg food is not allowed</li>
+                    <li>Outside food is not allowed</li>
+                    <li>Inside camps pure veg food available</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">Property Rules</h4>
+                  <ul className="list-disc list-inside space-y-1 ml-2">
+                    <li>Smoking within the premises is not allowed</li>
+                    <li>Alcohol consumption is not allowed within the property premises</li>
+                    <li>Pets are not allowed</li>
+                    <li>Visitors are allowed</li>
+                    <li>Allows private parties or events</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">Payment & Booking</h4>
+                  <ul className="list-disc list-inside space-y-1 ml-2">
+                    <li>Credit/debit cards are accepted</li>
+                    <li>UPI and QR code accepted</li>
+                    <li>Room capacity limits are strictly followed</li>
+                    <li>Standard check-in/check-out times apply</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">Important Notes</h4>
+                  <ul className="list-disc list-inside space-y-1 ml-2">
+                    <li>This is a guesthouse focused on providing a sanctimonious spiritual experience</li>
+                    <li>Guesthouse management has right of refusal of entry if booking violates rules</li>
+                    <li>No refund applicable if check-in is denied due to rule violations</li>
+                    <li>Booking confirmation is subject to management's modification/cancellation</li>
+                    <li>Any disputes shall be subject to Ujjain (M.P.) jurisdiction</li>
+                    <li>Terms may change at any time by posting notifications online</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="border-t border-gray-200 p-4 sm:p-6 bg-gray-50">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <button
+                  onClick={() => setShowTermsModal(false)}
+                  className="flex-1 px-4 py-2 sm:px-6 sm:py-3 border-2 border-orange-500 text-orange-600 font-semibold rounded-lg hover:bg-orange-50 transition-colors text-sm sm:text-base"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={() => {
+                    setAgreedTerms(true);
+                    setShowTermsModal(false);
+                  }}
+                  className="flex-1 px-4 py-2 sm:px-6 sm:py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-colors text-sm sm:text-base"
+                >
+                  Agree & Continue
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Error Modal */}
       {errorModal.show && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-3 sm:p-4">
@@ -1243,8 +1351,16 @@ export default function HomePage() {
                       className="mt-1 w-4 h-4 sm:w-5 sm:h-5 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 focus:ring-2"
                     />
                     <label htmlFor="agreeTerms" className="text-gray-700 text-xs sm:text-sm leading-relaxed">
-                      I agree to the Terms & Conditions and understand that this booking is subject to 
-                      availability confirmation. I confirm that all provided information is accurate.
+                      I agree to the{" "}
+                      <button
+                        type="button"
+                        onClick={() => setShowTermsModal(true)}
+                        className="text-orange-600 hover:text-orange-500 font-semibold underline focus:outline-none"
+                      >
+                        Terms & Conditions
+                      </button>{" "}
+                      and understand that this booking is subject to availability confirmation. 
+                      I confirm that all provided information is accurate.
                     </label>
                   </div>
 
