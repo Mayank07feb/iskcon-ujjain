@@ -57,20 +57,20 @@ export default function HomePage() {
       "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&h=600&fit=crop",
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop",
       "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&fit=crop",
     ],
     "Standard Non-AC Room": [
       "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?w=800&h=600&fit=crop",
       "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&h=600&fit=crop",
       "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1564078516393-cf04bd966897?w=800&h=600&fit=crop"
+      "https://images.unsplash.com/photo-1564078516393-cf04bd966897?w=800&h=600&fit=crop",
     ],
-    "Dormitory": [
+    Dormitory: [
       "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&h=600&fit=crop",
       "https://images.unsplash.com/photo-1567767292278-a4f21aa2d36e?w=800&h=600&fit=crop",
       "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&h=600&fit=crop"
-    ]
+      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&h=600&fit=crop",
+    ],
   };
 
   const roomAvailability = {
@@ -180,18 +180,18 @@ export default function HomePage() {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (!lightboxOpen) return;
-      
-      if (e.key === 'Escape') {
+
+      if (e.key === "Escape") {
         closeLightbox();
-      } else if (e.key === 'ArrowRight') {
+      } else if (e.key === "ArrowRight") {
         nextImage();
-      } else if (e.key === 'ArrowLeft') {
+      } else if (e.key === "ArrowLeft") {
         prevImage();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [lightboxOpen]);
 
   const prevSlide = () => {
@@ -209,16 +209,18 @@ export default function HomePage() {
   // Lightbox navigation functions
   const nextImage = () => {
     if (selectedRoomDetails) {
-      setCurrentImageIndex((prev) => 
-        (prev + 1) % roomImages[selectedRoomDetails].length
+      setCurrentImageIndex(
+        (prev) => (prev + 1) % roomImages[selectedRoomDetails].length
       );
     }
   };
 
   const prevImage = () => {
     if (selectedRoomDetails) {
-      setCurrentImageIndex((prev) => 
-        (prev - 1 + roomImages[selectedRoomDetails].length) % roomImages[selectedRoomDetails].length
+      setCurrentImageIndex(
+        (prev) =>
+          (prev - 1 + roomImages[selectedRoomDetails].length) %
+          roomImages[selectedRoomDetails].length
       );
     }
   };
@@ -319,7 +321,8 @@ export default function HomePage() {
       setErrorModal({
         show: true,
         title: "Terms & Conditions",
-        message: "Please agree to the Terms & Conditions to proceed with your booking.",
+        message:
+          "Please agree to the Terms & Conditions to proceed with your booking.",
       });
       return;
     }
@@ -457,7 +460,7 @@ export default function HomePage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-orange-50 p-3 sm:p-4">
         <Lightbox />
-        
+
         <div className="max-w-6xl mx-auto">
           <button
             onClick={closeRoomDetails}
@@ -479,8 +482,12 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-center">
                   <div className="bg-black/50 backdrop-blur-sm px-3 py-2 sm:px-4 sm:py-2 rounded-lg">
-                    <p className="font-semibold text-sm sm:text-base">Click to view gallery</p>
-                    <p className="text-xs sm:text-sm">{images.length} images available</p>
+                    <p className="font-semibold text-sm sm:text-base">
+                      Click to view gallery
+                    </p>
+                    <p className="text-xs sm:text-sm">
+                      {images.length} images available
+                    </p>
                   </div>
                 </div>
               </div>
@@ -488,7 +495,9 @@ export default function HomePage() {
 
             {/* Thumbnail Gallery */}
             <div className="p-4 sm:p-6 border-b">
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-3 sm:mb-4">Room Gallery</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-3 sm:mb-4">
+                Room Gallery
+              </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
                 {images.map((img, index) => (
                   <div
@@ -517,19 +526,25 @@ export default function HomePage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10 p-4 sm:p-6 bg-orange-50 rounded-xl sm:rounded-2xl">
                 <div className="text-center sm:text-left">
-                  <p className="text-sm text-gray-600 mb-1 sm:mb-2">Room Size</p>
+                  <p className="text-sm text-gray-600 mb-1 sm:mb-2">
+                    Room Size
+                  </p>
                   <p className="text-xl sm:text-2xl font-bold text-orange-600">
                     {details.size}
                   </p>
                 </div>
                 <div className="text-center sm:text-left">
-                  <p className="text-sm text-gray-600 mb-1 sm:mb-2">Occupancy</p>
+                  <p className="text-sm text-gray-600 mb-1 sm:mb-2">
+                    Occupancy
+                  </p>
                   <p className="text-xl sm:text-2xl font-bold text-orange-600">
                     {details.occupancy}
                   </p>
                 </div>
                 <div className="text-center sm:text-left">
-                  <p className="text-sm text-gray-600 mb-1 sm:mb-2">Refundable</p>
+                  <p className="text-sm text-gray-600 mb-1 sm:mb-2">
+                    Refundable
+                  </p>
                   <p className="text-xl sm:text-2xl font-bold text-orange-600">
                     {details.refundable ? "Yes" : "Non-Refundable"}
                   </p>
@@ -547,7 +562,9 @@ export default function HomePage() {
                       className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gray-50 rounded-lg"
                     >
                       <CheckCircleIcon className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0" />
-                      <span className="text-gray-700 text-sm sm:text-base">{amenity}</span>
+                      <span className="text-gray-700 text-sm sm:text-base">
+                        {amenity}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -592,113 +609,145 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-orange-50">
       <Lightbox />
+
+    {/* Terms & Conditions Modal */}
+{showTermsModal && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-3 sm:p-4">
+    <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl sm:shadow-2xl w-full max-w-2xl sm:max-w-3xl md:max-w-4xl max-h-[90vh] overflow-hidden mx-2 sm:mx-4 transform animate-scale-in">
       
-      {/* Terms & Conditions Modal */}
-      {showTermsModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-3 sm:p-4">
-          <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl sm:shadow-2xl w-full max-w-2xl sm:max-w-3xl md:max-w-4xl max-h-[90vh] overflow-hidden mx-2 sm:mx-4 transform animate-scale-in">
-            {/* Header */}
-            <div className="bg-orange-500 text-white p-4 sm:p-6">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xl sm:text-2xl font-bold">Terms & Conditions</h3>
-                <button
-                  onClick={() => setShowTermsModal(false)}
-                  className="p-1 hover:bg-orange-600 rounded-full transition-colors"
-                >
-                  <XMarkIcon className="w-6 h-6 sm:w-7 sm:h-7" />
-                </button>
-              </div>
-            </div>
-
-            {/* Content */}
-            <div className="p-4 sm:p-6 max-h-[60vh] overflow-y-auto">
-              <div className="space-y-4 sm:space-y-6 text-sm sm:text-base text-gray-700">
-                <div>
-                  <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">Guest Restrictions</h4>
-                  <ul className="list-disc list-inside space-y-1 ml-2">
-                    <li>Unmarried couples are not allowed</li>
-                    <li>Guests below 18 years of age are allowed</li>
-                    <li>Suitable for children</li>
-                    <li>Taking extra mattress is compulsory for child of age 8 or above</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">ID Proof Requirements</h4>
-                  <ul className="list-disc list-inside space-y-1 ml-2">
-                    <li><strong>Accepted:</strong> Passport, Aadhar, Driving License and Govt. ID</li>
-                    <li><strong>Not Accepted:</strong> Office ID, PAN Card and Non-Govt IDs</li>
-                    <li>Local IDs not allowed</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">Food & Dining</h4>
-                  <ul className="list-disc list-inside space-y-1 ml-2">
-                    <li>Non-veg food is not allowed</li>
-                    <li>Outside food is not allowed</li>
-                    <li>Inside camps pure veg food available</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">Property Rules</h4>
-                  <ul className="list-disc list-inside space-y-1 ml-2">
-                    <li>Smoking within the premises is not allowed</li>
-                    <li>Alcohol consumption is not allowed within the property premises</li>
-                    <li>Pets are not allowed</li>
-                    <li>Visitors are allowed</li>
-                    <li>Allows private parties or events</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">Payment & Booking</h4>
-                  <ul className="list-disc list-inside space-y-1 ml-2">
-                    <li>Credit/debit cards are accepted</li>
-                    <li>UPI and QR code accepted</li>
-                    <li>Room capacity limits are strictly followed</li>
-                    <li>Standard check-in/check-out times apply</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">Important Notes</h4>
-                  <ul className="list-disc list-inside space-y-1 ml-2">
-                    <li>This is a guesthouse focused on providing a sanctimonious spiritual experience</li>
-                    <li>Guesthouse management has right of refusal of entry if booking violates rules</li>
-                    <li>No refund applicable if check-in is denied due to rule violations</li>
-                    <li>Booking confirmation is subject to management's modification/cancellation</li>
-                    <li>Any disputes shall be subject to Ujjain (M.P.) jurisdiction</li>
-                    <li>Terms may change at any time by posting notifications online</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="border-t border-gray-200 p-4 sm:p-6 bg-gray-50">
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                <button
-                  onClick={() => setShowTermsModal(false)}
-                  className="flex-1 px-4 py-2 sm:px-6 sm:py-3 border-2 border-orange-500 text-orange-600 font-semibold rounded-lg hover:bg-orange-50 transition-colors text-sm sm:text-base"
-                >
-                  Close
-                </button>
-                <button
-                  onClick={() => {
-                    setAgreedTerms(true);
-                    setShowTermsModal(false);
-                  }}
-                  className="flex-1 px-4 py-2 sm:px-6 sm:py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-colors text-sm sm:text-base"
-                >
-                  Agree & Continue
-                </button>
-              </div>
-            </div>
-          </div>
+      {/* Header */}
+      <div className="bg-orange-500 text-white p-4 sm:p-6">
+        <div className="flex items-center justify-between">
+          <h3 className="text-xl sm:text-2xl font-bold">
+            Terms & Conditions
+          </h3>
+          <button
+            onClick={() => setShowTermsModal(false)}
+            className="p-1 hover:bg-orange-600 rounded-full transition-colors"
+          >
+            <XMarkIcon className="w-6 h-6 sm:w-7 sm:h-7" />
+          </button>
         </div>
-      )}
+      </div>
+
+      {/* Content */}
+      <div className="p-4 sm:p-6 max-h-[60vh] overflow-y-auto">
+        <div className="space-y-4 sm:space-y-6 text-sm sm:text-base text-gray-700">
+          
+          <div>
+            <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
+              Guest Restrictions
+            </h4>
+            <ul className="list-disc list-inside space-y-1 ml-2">
+              <li>Unmarried couples are not allowed</li>
+              <li>Guests below 18 years of age are allowed</li>
+              <li>Suitable for children</li>
+              <li>Taking extra mattress is compulsory for child of age 8 or above</li>
+              <li>Extra Member allowed: Maximum 1</li> {/* Added */}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
+              ID Proof Requirements
+            </h4>
+            <ul className="list-disc list-inside space-y-1 ml-2">
+              <li><strong>Accepted:</strong> Passport, Aadhar, Driving License and Govt. ID</li>
+              <li><strong>Not Accepted:</strong> Office ID, PAN Card and Non-Govt IDs</li>
+              <li>Local IDs not allowed</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
+              Food & Dining
+            </h4>
+            <ul className="list-disc list-inside space-y-1 ml-2">
+              <li>Non-veg food is not allowed</li>
+              <li>Outside food is not allowed</li>
+              <li>Inside camps pure veg food available</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
+              Property Rules
+            </h4>
+            <ul className="list-disc list-inside space-y-1 ml-2">
+              <li>Smoking within the premises is not allowed</li>
+              <li>Alcohol consumption is not allowed within the property premises</li>
+              <li>Pets are not allowed</li>
+              <li>Visitors are not allowed</li> {/* Updated */}
+              <li>Private parties or events not allowed</li> {/* Updated */}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
+              Amenities
+            </h4>
+            <ul className="list-disc list-inside space-y-1 ml-2">
+              {/* Removed Flat-screen TV and Reading Lamp */}
+              <li>Wi-Fi available</li>
+              <li>Air Conditioning</li>
+              <li>Hot Water</li>
+              <li>Basic toiletries provided</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
+              Payment & Booking
+            </h4>
+            <ul className="list-disc list-inside space-y-1 ml-2">
+              <li>Credit/debit cards are accepted</li>
+              <li>UPI and QR code accepted</li>
+              <li>Room capacity limits are strictly followed</li>
+              <li>Standard check-in/check-out times apply</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
+              Important Notes
+            </h4>
+            <ul className="list-disc list-inside space-y-1 ml-2">
+              <li>This is a guesthouse focused on providing a sanctimonious spiritual experience</li>
+              <li>Guesthouse management has right of refusal of entry if booking violates rules</li>
+              <li>No refund applicable if check-in is denied due to rule violations</li>
+              <li>Booking confirmation is subject to management's modification/cancellation</li>
+              <li>Any disputes shall be subject to Ujjain (M.P.) jurisdiction</li>
+              <li>Terms may change at any time by posting notifications online</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="border-t border-gray-200 p-4 sm:p-6 bg-gray-50">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+          <button
+            onClick={() => setShowTermsModal(false)}
+            className="flex-1 px-4 py-2 sm:px-6 sm:py-3 border-2 border-orange-500 text-orange-600 font-semibold rounded-lg hover:bg-orange-50 transition-colors text-sm sm:text-base"
+          >
+            Close
+          </button>
+          <button
+            onClick={() => {
+              setAgreedTerms(true);
+              setShowTermsModal(false);
+            }}
+            className="flex-1 px-4 py-2 sm:px-6 sm:py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-colors text-sm sm:text-base"
+          >
+            Agree & Continue
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
 
       {/* Error Modal */}
       {errorModal.show && (
@@ -800,14 +849,18 @@ export default function HomePage() {
                     </span>
                   </div>
                   <div className="flex justify-between flex-wrap">
-                    <span className="text-gray-600">{formData.idType} Number:</span>
+                    <span className="text-gray-600">
+                      {formData.idType} Number:
+                    </span>
                     <span className="font-medium text-gray-800">
                       {formData.idNumber}
                     </span>
                   </div>
 
                   <div className="border-t border-orange-200 pt-2 mt-2 flex justify-between items-center">
-                    <span className="text-gray-600 text-xs sm:text-sm">Total:</span>
+                    <span className="text-gray-600 text-xs sm:text-sm">
+                      Total:
+                    </span>
                     <span className="text-base sm:text-lg font-bold text-orange-500">
                       ₹{calculateTotal()}
                     </span>
@@ -817,7 +870,9 @@ export default function HomePage() {
 
               <div className="bg-blue-50 rounded-lg p-2 sm:p-3 md:p-4 mb-3 sm:mb-4 text-left sm:text-center">
                 <p className="text-xs sm:text-sm text-blue-800 space-y-1">
-                  <strong className="block mb-1 text-sm sm:text-base">We'll contact you at:</strong>
+                  <strong className="block mb-1 text-sm sm:text-base">
+                    We'll contact you at:
+                  </strong>
                   <span className="flex sm:justify-center items-center gap-1 sm:gap-2">
                     <PhoneIcon className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" />
                     {formData.phone}
@@ -967,14 +1022,18 @@ export default function HomePage() {
                     className="p-4 sm:p-6 md:p-8 border-2 border-orange-500 rounded-xl sm:rounded-2xl hover:bg-orange-50 transition-all group"
                   >
                     <CheckCircleIcon className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-3 sm:mb-4 text-orange-500" />
-                    <h4 className="text-lg sm:text-xl md:text-xl font-bold mb-1 sm:mb-2 text-center">Yes, I have</h4>
+                    <h4 className="text-lg sm:text-xl md:text-xl font-bold mb-1 sm:mb-2 text-center">
+                      Yes, I have
+                    </h4>
                   </button>
                   <button
                     onClick={() => handlePatronSelect("no")}
                     className="p-4 sm:p-6 md:p-8 border-2 border-gray-300 rounded-xl sm:rounded-2xl hover:bg-gray-50 transition-all"
                   >
                     <XMarkIcon className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-3 sm:mb-4 text-gray-500" />
-                    <h4 className="text-lg sm:text-xl md:text-xl font-bold mb-1 sm:mb-2 text-center">No, I don't</h4>
+                    <h4 className="text-lg sm:text-xl md:text-xl font-bold mb-1 sm:mb-2 text-center">
+                      No, I don't
+                    </h4>
                   </button>
                 </div>
               </div>
@@ -1257,7 +1316,10 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                <form
+                  onSubmit={handleSubmit}
+                  className="space-y-4 sm:space-y-6"
+                >
                   <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
                     <div>
                       <label className="block text-gray-700 font-semibold mb-1 sm:mb-2 text-sm sm:text-base">
@@ -1327,14 +1389,14 @@ export default function HomePage() {
 
                   <div>
                     <label className="block text-gray-700 font-semibold mb-1 sm:mb-2 text-sm sm:text-base">
-                      {formData.idType || 'ID'} Number *
+                      {formData.idType || "ID"} Number *
                     </label>
                     <input
                       type="text"
                       name="idNumber"
                       value={formData.idNumber}
                       onChange={handleInputChange}
-                      placeholder={`Enter ${formData.idType || 'ID'} Number`}
+                      placeholder={`Enter ${formData.idType || "ID"} Number`}
                       required
                       className="border-2 border-gray-200 rounded-lg sm:rounded-xl p-3 sm:p-4 w-full focus:border-orange-500 focus:outline-none transition-colors text-sm sm:text-base"
                     />
@@ -1350,7 +1412,10 @@ export default function HomePage() {
                       required
                       className="mt-1 w-4 h-4 sm:w-5 sm:h-5 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 focus:ring-2"
                     />
-                    <label htmlFor="agreeTerms" className="text-gray-700 text-xs sm:text-sm leading-relaxed">
+                    <label
+                      htmlFor="agreeTerms"
+                      className="text-gray-700 text-xs sm:text-sm leading-relaxed"
+                    >
                       I agree to the{" "}
                       <button
                         type="button"
@@ -1359,8 +1424,9 @@ export default function HomePage() {
                       >
                         Terms & Conditions
                       </button>{" "}
-                      and understand that this booking is subject to availability confirmation. 
-                      I confirm that all provided information is accurate.
+                      and understand that this booking is subject to
+                      availability confirmation. I confirm that all provided
+                      information is accurate.
                     </label>
                   </div>
 
@@ -1368,12 +1434,14 @@ export default function HomePage() {
                     type="submit"
                     disabled={!agreedTerms}
                     className={`w-full font-bold py-3 sm:py-4 md:py-5 rounded-lg sm:rounded-xl shadow-lg sm:shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 text-sm sm:text-base ${
-                      agreedTerms 
-                        ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:shadow-orange-500/50 cursor-pointer'
-                        : 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                      agreedTerms
+                        ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:shadow-orange-500/50 cursor-pointer"
+                        : "bg-gray-400 text-gray-200 cursor-not-allowed"
                     }`}
                   >
-                    {agreedTerms ? 'Confirm Booking' : 'Please Accept Terms & Conditions'}
+                    {agreedTerms
+                      ? "Confirm Booking"
+                      : "Please Accept Terms & Conditions"}
                   </button>
                 </form>
               </div>
@@ -1562,7 +1630,9 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="bg-gray-800 text-orange-100 py-8 sm:py-10 md:py-12 text-center">
-        <p className="text-base sm:text-lg md:text-xl mb-1 sm:mb-2">Hare Krishna | Hare Rama</p>
+        <p className="text-base sm:text-lg md:text-xl mb-1 sm:mb-2">
+          Hare Krishna | Hare Rama
+        </p>
         <p className="text-xs sm:text-sm md:text-base">
           &copy; {new Date().getFullYear()} ISKCON Ujjain. All rights reserved.
         </p>

@@ -1,20 +1,18 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./screens/Home";
-import Dashboard from "./screens/Dashboard";
+import DashboardLayout from "./layouts/DashboardLayout";
 
 export default function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-100">
-        <Routes>
-          {/* Home Page */}
-          <Route path="/" element={<Home />} />
+      <Routes>
+        {/* Public Home Page */}
+        <Route path="/" element={<Home />} />
 
-          {/* Dashboard Page */}
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
-      </div>
+        {/* Dashboard layout with nested routes */}
+        <Route path="/dashboard/*" element={<DashboardLayout />} />
+      </Routes>
     </Router>
   );
 }
