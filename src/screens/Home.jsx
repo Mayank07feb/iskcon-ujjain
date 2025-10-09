@@ -99,18 +99,17 @@ export default function HomePage() {
   const roomDetails = {
     "Deluxe AC Room": {
       capacity: "Fits 2 Adults",
-      features: ["AC", "WiFi", "TV", "Attached Bath"],
+      features: ["AC", "WiFi", "Attached Bath"],
       image:
         "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=500&h=400&fit=crop",
       refundable: false,
       description:
         "Spacious room with modern amenities and air conditioning for ultimate comfort.",
       fullDescription:
-        "Experience luxury and comfort in our Deluxe AC Room. Each room is thoughtfully designed with premium furnishings, modern air conditioning system, and all the amenities you need for a comfortable stay. The room features a private attached bathroom with hot water facility, high-speed WiFi, flat-screen TV with cable channels, and spacious wardrobes. Perfect for couples or small families.",
+        "Experience luxury and comfort in our Deluxe AC Room. Each room is thoughtfully designed with premium furnishings, modern air conditioning system, and all the amenities you need for a comfortable stay. The room features a private attached bathroom with hot water facility, high-speed WiFi, and spacious wardrobes. Perfect for couples or small families.",
       amenities: [
         "Air Conditioning",
         "WiFi",
-        "Flat-screen TV",
         "Attached Bathroom",
         "Hot Water",
         "Spacious Wardrobe",
@@ -138,7 +137,6 @@ export default function HomePage() {
         "Hot Water",
         "Basic Furniture",
         "Clean Bedding",
-        "Reading Lamp",
         "Telephone",
       ],
       size: "250 sq ft",
@@ -304,7 +302,7 @@ export default function HomePage() {
       (checkoutDate - checkinDate) / (1000 * 60 * 60 * 24)
     );
     const guests = formData.guests || 1;
-    const members = formData.member || 0;
+    const members = Math.min(1, formData.member || 0); // Ensure max 1 member
     return basePrice * nights * (guests + members);
   };
 
@@ -610,144 +608,170 @@ export default function HomePage() {
     <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-orange-50">
       <Lightbox />
 
-    {/* Terms & Conditions Modal */}
-{showTermsModal && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-3 sm:p-4">
-    <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl sm:shadow-2xl w-full max-w-2xl sm:max-w-3xl md:max-w-4xl max-h-[90vh] overflow-hidden mx-2 sm:mx-4 transform animate-scale-in">
-      
-      {/* Header */}
-      <div className="bg-orange-500 text-white p-4 sm:p-6">
-        <div className="flex items-center justify-between">
-          <h3 className="text-xl sm:text-2xl font-bold">
-            Terms & Conditions
-          </h3>
-          <button
-            onClick={() => setShowTermsModal(false)}
-            className="p-1 hover:bg-orange-600 rounded-full transition-colors"
-          >
-            <XMarkIcon className="w-6 h-6 sm:w-7 sm:h-7" />
-          </button>
+      {/* Terms & Conditions Modal */}
+      {showTermsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-3 sm:p-4">
+          <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl sm:shadow-2xl w-full max-w-2xl sm:max-w-3xl md:max-w-4xl max-h-[90vh] overflow-hidden mx-2 sm:mx-4 transform animate-scale-in">
+            {/* Header */}
+            <div className="bg-orange-500 text-white p-4 sm:p-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl sm:text-2xl font-bold">
+                  Terms & Conditions
+                </h3>
+                <button
+                  onClick={() => setShowTermsModal(false)}
+                  className="p-1 hover:bg-orange-600 rounded-full transition-colors"
+                >
+                  <XMarkIcon className="w-6 h-6 sm:w-7 sm:h-7" />
+                </button>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="p-4 sm:p-6 max-h-[60vh] overflow-y-auto">
+              <div className="space-y-4 sm:space-y-6 text-sm sm:text-base text-gray-700">
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
+                    Guest Restrictions
+                  </h4>
+                  <ul className="list-disc list-inside space-y-1 ml-2">
+                    <li>Unmarried couples are not allowed</li>
+                    <li>Guests below 18 years of age are allowed</li>
+                    <li>Suitable for children</li>
+                    <li>
+                      Taking extra mattress is compulsory for child of age 8 or
+                      above
+                    </li>
+                    <li>Extra Member allowed: Maximum 1</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
+                    ID Proof Requirements
+                  </h4>
+                  <ul className="list-disc list-inside space-y-1 ml-2">
+                    <li>
+                      <strong>Accepted:</strong> Passport, Aadhar, Driving
+                      License and Govt. ID
+                    </li>
+                    <li>
+                      <strong>Not Accepted:</strong> Office ID, PAN Card and
+                      Non-Govt IDs
+                    </li>
+                    <li>Local IDs not allowed</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
+                    Food & Dining
+                  </h4>
+                  <ul className="list-disc list-inside space-y-1 ml-2">
+                    <li>Non-veg food is not allowed</li>
+                    <li>Outside food is not allowed</li>
+                    <li>Inside camps pure veg food available</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
+                    Property Rules
+                  </h4>
+                  <ul className="list-disc list-inside space-y-1 ml-2">
+                    <li>Smoking within the premises is not allowed</li>
+                    <li>
+                      Alcohol consumption is not allowed within the property
+                      premises
+                    </li>
+                    <li>Pets are not allowed</li>
+                    <li>Visitors are not allowed</li> {/* Updated */}
+                    <li>Private parties or events not allowed</li>{" "}
+                    {/* Updated */}
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
+                    Amenities
+                  </h4>
+                  <ul className="list-disc list-inside space-y-1 ml-2">
+                    <li>Wi-Fi available</li>
+                    <li>Air Conditioning</li>
+                    <li>Hot Water</li>
+                    <li>Basic toiletries provided</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
+                    Payment & Booking
+                  </h4>
+                  <ul className="list-disc list-inside space-y-1 ml-2">
+                    <li>Credit/debit cards are accepted</li>
+                    <li>UPI and QR code accepted</li>
+                    <li>Room capacity limits are strictly followed</li>
+                    <li>Standard check-in/check-out times apply</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
+                    Important Notes
+                  </h4>
+                  <ul className="list-disc list-inside space-y-1 ml-2">
+                    <li>
+                      This is a guesthouse focused on providing a sanctimonious
+                      spiritual experience
+                    </li>
+                    <li>
+                      Guesthouse management has right of refusal of entry if
+                      booking violates rules
+                    </li>
+                    <li>
+                      No refund applicable if check-in is denied due to rule
+                      violations
+                    </li>
+                    <li>
+                      Booking confirmation is subject to management's
+                      modification/cancellation
+                    </li>
+                    <li>
+                      Any disputes shall be subject to Ujjain (M.P.)
+                      jurisdiction
+                    </li>
+                    <li>
+                      Terms may change at any time by posting notifications
+                      online
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="border-t border-gray-200 p-4 sm:p-6 bg-gray-50">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <button
+                  onClick={() => setShowTermsModal(false)}
+                  className="flex-1 px-4 py-2 sm:px-6 sm:py-3 border-2 border-orange-500 text-orange-600 font-semibold rounded-lg hover:bg-orange-50 transition-colors text-sm sm:text-base"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={() => {
+                    setAgreedTerms(true);
+                    setShowTermsModal(false);
+                  }}
+                  className="flex-1 px-4 py-2 sm:px-6 sm:py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-colors text-sm sm:text-base"
+                >
+                  Agree & Continue
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-
-      {/* Content */}
-      <div className="p-4 sm:p-6 max-h-[60vh] overflow-y-auto">
-        <div className="space-y-4 sm:space-y-6 text-sm sm:text-base text-gray-700">
-          
-          <div>
-            <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
-              Guest Restrictions
-            </h4>
-            <ul className="list-disc list-inside space-y-1 ml-2">
-              <li>Unmarried couples are not allowed</li>
-              <li>Guests below 18 years of age are allowed</li>
-              <li>Suitable for children</li>
-              <li>Taking extra mattress is compulsory for child of age 8 or above</li>
-              <li>Extra Member allowed: Maximum 1</li> {/* Added */}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
-              ID Proof Requirements
-            </h4>
-            <ul className="list-disc list-inside space-y-1 ml-2">
-              <li><strong>Accepted:</strong> Passport, Aadhar, Driving License and Govt. ID</li>
-              <li><strong>Not Accepted:</strong> Office ID, PAN Card and Non-Govt IDs</li>
-              <li>Local IDs not allowed</li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
-              Food & Dining
-            </h4>
-            <ul className="list-disc list-inside space-y-1 ml-2">
-              <li>Non-veg food is not allowed</li>
-              <li>Outside food is not allowed</li>
-              <li>Inside camps pure veg food available</li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
-              Property Rules
-            </h4>
-            <ul className="list-disc list-inside space-y-1 ml-2">
-              <li>Smoking within the premises is not allowed</li>
-              <li>Alcohol consumption is not allowed within the property premises</li>
-              <li>Pets are not allowed</li>
-              <li>Visitors are not allowed</li> {/* Updated */}
-              <li>Private parties or events not allowed</li> {/* Updated */}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
-              Amenities
-            </h4>
-            <ul className="list-disc list-inside space-y-1 ml-2">
-              {/* Removed Flat-screen TV and Reading Lamp */}
-              <li>Wi-Fi available</li>
-              <li>Air Conditioning</li>
-              <li>Hot Water</li>
-              <li>Basic toiletries provided</li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
-              Payment & Booking
-            </h4>
-            <ul className="list-disc list-inside space-y-1 ml-2">
-              <li>Credit/debit cards are accepted</li>
-              <li>UPI and QR code accepted</li>
-              <li>Room capacity limits are strictly followed</li>
-              <li>Standard check-in/check-out times apply</li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-bold text-gray-800 mb-2 text-base sm:text-lg">
-              Important Notes
-            </h4>
-            <ul className="list-disc list-inside space-y-1 ml-2">
-              <li>This is a guesthouse focused on providing a sanctimonious spiritual experience</li>
-              <li>Guesthouse management has right of refusal of entry if booking violates rules</li>
-              <li>No refund applicable if check-in is denied due to rule violations</li>
-              <li>Booking confirmation is subject to management's modification/cancellation</li>
-              <li>Any disputes shall be subject to Ujjain (M.P.) jurisdiction</li>
-              <li>Terms may change at any time by posting notifications online</li>
-            </ul>
-          </div>
-
-        </div>
-      </div>
-
-      {/* Footer */}
-      <div className="border-t border-gray-200 p-4 sm:p-6 bg-gray-50">
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-          <button
-            onClick={() => setShowTermsModal(false)}
-            className="flex-1 px-4 py-2 sm:px-6 sm:py-3 border-2 border-orange-500 text-orange-600 font-semibold rounded-lg hover:bg-orange-50 transition-colors text-sm sm:text-base"
-          >
-            Close
-          </button>
-          <button
-            onClick={() => {
-              setAgreedTerms(true);
-              setShowTermsModal(false);
-            }}
-            className="flex-1 px-4 py-2 sm:px-6 sm:py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-colors text-sm sm:text-base"
-          >
-            Agree & Continue
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
-
+      )}
 
       {/* Error Modal */}
       {errorModal.show && (
@@ -845,7 +869,7 @@ export default function HomePage() {
                   <div className="flex justify-between flex-wrap">
                     <span className="text-gray-600">Additional Members:</span>
                     <span className="font-medium text-gray-800">
-                      {formData.member}
+                      {Math.min(1, formData.member || 0)}
                     </span>
                   </div>
                   <div className="flex justify-between flex-wrap">
@@ -1285,7 +1309,12 @@ export default function HomePage() {
                                   member: Math.max(0, (prev.member || 0) - 1),
                                 }))
                               }
-                              className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors text-sm sm:text-base"
+                              disabled={formData.member <= 0}
+                              className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center transition-colors text-sm sm:text-base ${
+                                formData.member <= 0
+                                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                  : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                              }`}
                             >
                               -
                             </button>
@@ -1293,8 +1322,18 @@ export default function HomePage() {
                               type="number"
                               name="member"
                               value={formData.member}
-                              onChange={handleInputChange}
+                              onChange={(e) => {
+                                const value = Math.min(
+                                  1,
+                                  Math.max(0, parseInt(e.target.value) || 0)
+                                );
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  member: value,
+                                }));
+                              }}
                               min="0"
+                              max="1"
                               className="w-full text-center p-2 sm:p-3 focus:outline-none text-sm sm:text-base"
                             />
                             <button
@@ -1302,14 +1341,24 @@ export default function HomePage() {
                               onClick={() =>
                                 setFormData((prev) => ({
                                   ...prev,
-                                  member: (prev.member || 0) + 1,
+                                  member: Math.min(1, (prev.member || 0) + 1),
                                 }))
                               }
-                              className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors text-sm sm:text-base"
+                              disabled={formData.member >= 1}
+                              className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center transition-colors text-sm sm:text-base ${
+                                formData.member >= 1
+                                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                  : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                              }`}
                             >
                               +
                             </button>
                           </div>
+                          {formData.member >= 1 && (
+                            <p className="text-xs text-green-600 mt-1 font-medium">
+                              Maximum 1 additional member allowed
+                            </p>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -1507,7 +1556,7 @@ export default function HomePage() {
                 img: "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=500&h=400&fit=crop",
                 title: "Deluxe AC Room",
                 desc: "Spacious room with modern amenities and air conditioning for ultimate comfort.",
-                features: ["AC", "WiFi", "TV"],
+                features: ["AC", "WiFi"],
               },
               {
                 img: "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?w=500&h=400&fit=crop",
