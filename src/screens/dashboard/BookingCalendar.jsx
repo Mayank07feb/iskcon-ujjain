@@ -1,4 +1,3 @@
-// screens/dashboard/BookingCalendar.jsx
 import React, { useState } from "react";
 import {
   ChevronLeftIcon,
@@ -6,7 +5,8 @@ import {
   EyeIcon,
   UserGroupIcon,
   CheckCircleIcon,
-  ClockIcon
+  ClockIcon,
+  XMarkIcon
 } from "@heroicons/react/24/outline";
 
 const sampleBookings = {
@@ -44,7 +44,9 @@ const roomCapacity = {
 export default function BookingCalendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
-  const [view, setView] = useState('calendar'); // 'calendar' or 'list'
+  const [view, setView] = useState('calendar');
+  const [showMobileDetails, setShowMobileDetails] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const getDaysInMonth = (date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -74,7 +76,6 @@ export default function BookingCalendar() {
     const bookings = getBookingsForDate(date);
     const confirmedBookings = bookings.filter(b => b.status === 'confirmed');
     
-    // Calculate occupancy
     const roomOccupancy = {};
     roomTypes.forEach(room => roomOccupancy[room] = 0);
     
@@ -82,7 +83,6 @@ export default function BookingCalendar() {
       roomOccupancy[booking.room] += booking.guests || 1;
     });
 
-    // Check if any room is fully booked
     const fullyBookedRooms = roomTypes.filter(room => 
       roomOccupancy[room] >= roomCapacity[room]
     );
@@ -97,7 +97,6 @@ export default function BookingCalendar() {
     const firstDay = getFirstDayOfMonth(currentDate);
     const calendar = [];
 
-    // Previous month days
     const prevMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
     const prevMonthDays = getDaysInMonth(prevMonth);
     
@@ -106,14 +105,12 @@ export default function BookingCalendar() {
       calendar.push({ date, isCurrentMonth: false });
     }
 
-    // Current month days
     for (let day = 1; day <= daysInMonth; day++) {
       const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
       calendar.push({ date, isCurrentMonth: true });
     }
 
-    // Next month days
-    const totalCells = 42; // 6 weeks
+    const totalCells = 42;
     const nextMonthDays = totalCells - calendar.length;
     for (let day = 1; day <= nextMonthDays; day++) {
       const date = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, day);
@@ -157,7 +154,6 @@ export default function BookingCalendar() {
     return { total: bookings.length, confirmed, pending };
   };
 
-  // Get all bookings for the current month
   const getAllMonthBookings = () => {
     const bookings = [];
     const daysInMonth = getDaysInMonth(currentDate);
@@ -176,76 +172,162 @@ export default function BookingCalendar() {
     return bookings.sort((a, b) => new Date(a.checkIn) - new Date(b.checkIn));
   };
 
+  const handleDateClick = (date) => {
+    setSelectedDate(date);
+    setShowMobileDetails(true);
+  };
+
+  const handleMonthYearChange = (year, month) => {
+    setCurrentDate(new Date(year, month, 1));
+    setShowDatePicker(false);
+  };
+
+  const handleTodayClick = () => {
+    const today = new Date();
+    setCurrentDate(today);
+    setSelectedDate(today);
+    setShowDatePicker(false);
+  };
+
+  // Generate year options (current year ± 5 years)
+  const currentYear = new Date().getFullYear();
+  const yearOptions = Array.from({ length: 11 }, (_, i) => currentYear - 5 + i);
+  const monthOptions = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6 p-4 md:p-0">
       {/* Header */}
-      <div className="sm:flex sm:items-center sm:justify-between">
+      <div className="space-y-3 sm:space-y-0 sm:flex sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold leading-7 text-gray-900">
             Booking Calendar
           </h1>
-          <p className="mt-1 text-sm text-gray-500">
-            View all bookings and availability at a glance
+          <p className="mt-1 text-xs sm:text-sm text-gray-500">
+            View all bookings and availability
           </p>
         </div>
-        <div className="mt-4 sm:mt-0 flex space-x-3">
+        <div className="flex space-x-2 sm:space-x-3">
           <button
             onClick={() => setView('calendar')}
-            className={`px-4 py-2 rounded-md text-sm font-medium ${
+            className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors ${
               view === 'calendar' 
                 ? 'bg-orange-600 text-white' 
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            Calendar View
+            Calendar
           </button>
           <button
             onClick={() => setView('list')}
-            className={`px-4 py-2 rounded-md text-sm font-medium ${
+            className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors ${
               view === 'list' 
                 ? 'bg-orange-600 text-white' 
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            List View
+            List
           </button>
         </div>
       </div>
 
       {view === 'calendar' ? (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Calendar - Compact Version */}
-          <div className="lg:col-span-2 bg-white rounded-lg shadow">
-            <div className="p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+          {/* Calendar */}
+          <div className="lg:col-span-2 bg-white rounded-lg shadow overflow-hidden">
+            <div className="p-3 sm:p-4 md:p-6">
               {/* Calendar Header */}
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center justify-between mb-4 md:mb-6">
                 <button
                   onClick={() => navigateMonth(-1)}
-                  className="p-2 hover:bg-gray-100 rounded-lg"
+                  className="p-2 hover:bg-gray-100 rounded-lg touch-manipulation"
+                  aria-label="Previous month"
                 >
                   <ChevronLeftIcon className="w-5 h-5" />
                 </button>
-                <h2 className="text-xl font-semibold text-gray-900">
-                  {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
-                </h2>
+                <button
+                  onClick={() => setShowDatePicker(!showDatePicker)}
+                  className="px-3 py-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <h2 className="text-base sm:text-lg md:text-xl font-semibold text-gray-900">
+                    {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
+                  </h2>
+                </button>
                 <button
                   onClick={() => navigateMonth(1)}
-                  className="p-2 hover:bg-gray-100 rounded-lg"
+                  className="p-2 hover:bg-gray-100 rounded-lg touch-manipulation"
+                  aria-label="Next month"
                 >
                   <ChevronRightIcon className="w-5 h-5" />
                 </button>
               </div>
 
-              {/* Compact Calendar Grid */}
-              <div className="grid grid-cols-7 gap-1 mb-4">
+              {/* Date Picker Dropdown */}
+              {showDatePicker && (
+                <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        Month
+                      </label>
+                      <select
+                        value={currentDate.getMonth()}
+                        onChange={(e) => handleMonthYearChange(currentDate.getFullYear(), parseInt(e.target.value))}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm"
+                      >
+                        {monthOptions.map((month, index) => (
+                          <option key={index} value={index}>
+                            {month}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-2">
+                        Year
+                      </label>
+                      <select
+                        value={currentDate.getFullYear()}
+                        onChange={(e) => handleMonthYearChange(parseInt(e.target.value), currentDate.getMonth())}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm"
+                      >
+                        {yearOptions.map((year) => (
+                          <option key={year} value={year}>
+                            {year}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <div className="flex justify-end gap-2">
+                    <button
+                      onClick={handleTodayClick}
+                      className="px-4 py-2 text-sm font-medium text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
+                    >
+                      Today
+                    </button>
+                    <button
+                      onClick={() => setShowDatePicker(false)}
+                      className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 bg-gray-100 rounded-lg transition-colors"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Calendar Grid */}
+              <div className="grid grid-cols-7 gap-0.5 sm:gap-1 mb-2 sm:mb-4">
                 {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(day => (
-                  <div key={day} className="text-center text-sm font-medium text-gray-500 py-2">
+                  <div key={day} className="text-center text-xs sm:text-sm font-medium text-gray-500 py-1 sm:py-2">
                     {day}
                   </div>
                 ))}
               </div>
 
-              <div className="grid grid-cols-7 gap-1">
+              <div className="grid grid-cols-7 gap-0.5 sm:gap-1">
                 {generateCalendar().map(({ date, isCurrentMonth }, index) => {
                   const bookings = getBookingsForDate(date);
                   const status = getDateStatus(date);
@@ -256,38 +338,38 @@ export default function BookingCalendar() {
                   return (
                     <button
                       key={index}
-                      onClick={() => setSelectedDate(date)}
+                      onClick={() => handleDateClick(date)}
                       className={`
-                        min-h-20 p-2 border rounded-lg text-center transition-all duration-200
+                        min-h-12 sm:min-h-16 md:min-h-20 p-1 sm:p-2 border rounded sm:rounded-lg text-center transition-all duration-200 touch-manipulation
                         ${!isCurrentMonth ? 'text-gray-400 bg-gray-50' : ''}
-                        ${isToday ? 'ring-2 ring-orange-500 ring-inset' : ''}
-                        ${isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : ''}
+                        ${isToday ? 'ring-1 sm:ring-2 ring-orange-500 ring-inset' : ''}
+                        ${isSelected ? 'ring-1 sm:ring-2 ring-blue-500 bg-blue-50' : ''}
                         ${isCurrentMonth ? getStatusColor(status) : 'bg-gray-50'}
-                        hover:shadow-md flex flex-col items-center justify-between
+                        hover:shadow-md active:scale-95 flex flex-col items-center justify-between
                       `}
                     >
-                      <div className="flex items-center justify-between w-full mb-1">
-                        <span className={`text-sm font-medium ${
+                      <div className="flex items-center justify-between w-full mb-0.5 sm:mb-1">
+                        <span className={`text-xs sm:text-sm font-medium ${
                           isToday ? 'text-orange-600' : ''
                         }`}>
                           {date.getDate()}
                         </span>
                         {stats.total > 0 && (
-                          <span className="text-xs bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center">
+                          <span className="text-xs bg-blue-500 text-white rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center text-[10px] sm:text-xs">
                             {stats.total}
                           </span>
                         )}
                       </div>
                       
                       {isCurrentMonth && stats.total > 0 && (
-                        <div className="space-y-1 w-full">
-                          <div className="flex justify-between text-xs">
+                        <div className="space-y-0.5 sm:space-y-1 w-full hidden sm:block">
+                          <div className="flex justify-between text-[10px] sm:text-xs">
                             <span className="text-green-600">✓{stats.confirmed}</span>
                             {stats.pending > 0 && (
                               <span className="text-yellow-600">⏰{stats.pending}</span>
                             )}
                           </div>
-                          <div className="text-xs font-medium truncate">
+                          <div className="text-[10px] sm:text-xs font-medium truncate">
                             {bookings[0]?.room.split(' ')[0]}
                             {stats.total > 1 && ` +${stats.total - 1}`}
                           </div>
@@ -298,24 +380,24 @@ export default function BookingCalendar() {
                 })}
               </div>
 
-              {/* Month Summary */}
-              <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-700">
+              {/* Month Summary - Hidden on mobile */}
+              <div className="mt-4 md:mt-6 p-3 md:p-4 bg-gray-50 rounded-lg hidden sm:block">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                  <span className="text-xs sm:text-sm font-medium text-gray-700">
                     {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })} Summary
                   </span>
-                  <div className="flex items-center space-x-4">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4">
                     <div className="flex items-center">
-                      <div className="w-3 h-3 bg-green-100 border border-green-300 rounded mr-2"></div>
-                      <span className="text-xs text-gray-600">Available</span>
+                      <div className="w-3 h-3 bg-green-100 border border-green-300 rounded mr-1 sm:mr-2"></div>
+                      <span className="text-[10px] sm:text-xs text-gray-600">Available</span>
                     </div>
                     <div className="flex items-center">
-                      <div className="w-3 h-3 bg-yellow-100 border border-yellow-300 rounded mr-2"></div>
-                      <span className="text-xs text-gray-600">Partially Booked</span>
+                      <div className="w-3 h-3 bg-yellow-100 border border-yellow-300 rounded mr-1 sm:mr-2"></div>
+                      <span className="text-[10px] sm:text-xs text-gray-600">Partial</span>
                     </div>
                     <div className="flex items-center">
-                      <div className="w-3 h-3 bg-red-100 border border-red-300 rounded mr-2"></div>
-                      <span className="text-xs text-gray-600">Fully Booked</span>
+                      <div className="w-3 h-3 bg-red-100 border border-red-300 rounded mr-1 sm:mr-2"></div>
+                      <span className="text-[10px] sm:text-xs text-gray-600">Full</span>
                     </div>
                   </div>
                 </div>
@@ -323,8 +405,8 @@ export default function BookingCalendar() {
             </div>
           </div>
 
-          {/* Booking Details Panel */}
-          <div className="bg-white rounded-lg shadow">
+          {/* Booking Details Panel - Desktop */}
+          <div className="hidden lg:block bg-white rounded-lg shadow">
             <div className="p-6 border-b">
               <h3 className="text-lg font-semibold text-gray-900">
                 {selectedDate ? `Bookings for ${selectedDate.toDateString()}` : 'Select a Date'}
@@ -397,25 +479,98 @@ export default function BookingCalendar() {
               )}
             </div>
           </div>
+
+          {/* Mobile Bottom Sheet for Booking Details */}
+          {showMobileDetails && selectedDate && (
+            <div className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end">
+              <div className="bg-white w-full rounded-t-2xl max-h-[80vh] overflow-y-auto">
+                <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {selectedDate.toLocaleDateString('default', { month: 'short', day: 'numeric' })}
+                  </h3>
+                  <button
+                    onClick={() => setShowMobileDetails(false)}
+                    className="p-2 hover:bg-gray-100 rounded-lg"
+                  >
+                    <XMarkIcon className="w-5 h-5" />
+                  </button>
+                </div>
+                
+                <div className="p-4 space-y-4">
+                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <span className="text-sm font-medium text-gray-700">Status:</span>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeColor(getDateStatus(selectedDate))}`}>
+                      {getStatusText(getDateStatus(selectedDate))}
+                    </span>
+                  </div>
+
+                  {getBookingsForDate(selectedDate).length > 0 ? (
+                    <div className="space-y-3">
+                      <h4 className="font-medium text-gray-900">
+                        {getBookingsForDate(selectedDate).length} Booking(s)
+                      </h4>
+                      {getBookingsForDate(selectedDate).map(booking => (
+                        <div key={booking.id} className="border rounded-lg p-3">
+                          <div className="flex justify-between items-start mb-2">
+                            <div>
+                              <p className="font-medium text-gray-900">{booking.guestName}</p>
+                              <p className="text-sm text-gray-600">{booking.room}</p>
+                            </div>
+                            <span className={`px-2 py-1 rounded-full text-xs flex items-center ${
+                              booking.status === 'confirmed' 
+                                ? 'bg-green-100 text-green-800' 
+                                : 'bg-yellow-100 text-yellow-800'
+                            }`}>
+                              {booking.status === 'confirmed' ? (
+                                <CheckCircleIcon className="w-3 h-3 mr-1" />
+                              ) : (
+                                <ClockIcon className="w-3 h-3 mr-1" />
+                              )}
+                              {booking.status}
+                            </span>
+                          </div>
+                          <div className="text-xs text-gray-500 space-y-1">
+                            <div>Check-in: {booking.checkIn}</div>
+                            <div>Check-out: {booking.checkOut}</div>
+                            <div>Guests: {booking.guests}</div>
+                          </div>
+                          <button className="mt-2 text-xs text-blue-600 flex items-center">
+                            <EyeIcon className="w-3 h-3 mr-1" />
+                            View Details
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 text-gray-500">
+                      <UserGroupIcon className="w-12 h-12 mx-auto text-gray-300 mb-2" />
+                      <p className="text-sm">No bookings for this date</p>
+                      <p className="text-xs text-gray-400 mt-1">All rooms available</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         /* List View */
         <div className="bg-white rounded-lg shadow">
-          <div className="p-6 border-b">
-            <h3 className="text-lg font-semibold text-gray-900">
+          <div className="p-4 sm:p-6 border-b">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900">
               All Bookings - {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
             </h3>
           </div>
-          <div className="p-6">
-            <div className="space-y-4">
+          <div className="p-4 sm:p-6">
+            <div className="space-y-3 sm:space-y-4">
               {getAllMonthBookings().length > 0 ? (
                 getAllMonthBookings().map(booking => (
-                  <div key={`${booking.id}-${booking.checkIn}`} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
-                    <div className="flex justify-between items-start">
+                  <div key={`${booking.id}-${booking.checkIn}`} className="border rounded-lg p-3 sm:p-4 hover:bg-gray-50 transition-colors">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
                       <div className="flex-1">
-                        <div className="flex items-center space-x-4">
-                          <div className="text-sm font-medium text-gray-500 w-24">
-                            {booking.displayDate.toDateString()}
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                          <div className="text-xs sm:text-sm font-medium text-gray-500 sm:w-24">
+                            {booking.displayDate.toLocaleDateString('default', { month: 'short', day: 'numeric' })}
                           </div>
                           <div>
                             <p className="font-medium text-gray-900">{booking.guestName}</p>
@@ -423,20 +578,20 @@ export default function BookingCalendar() {
                           </div>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-4">
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4">
+                        <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
                           booking.status === 'confirmed' 
                             ? 'bg-green-100 text-green-800' 
                             : 'bg-yellow-100 text-yellow-800'
                         }`}>
                           {booking.status}
                         </span>
-                        <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                        <button className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm font-medium whitespace-nowrap">
                           View Details
                         </button>
                       </div>
                     </div>
-                    <div className="mt-2 text-xs text-gray-500 flex space-x-4">
+                    <div className="mt-2 text-xs text-gray-500 flex flex-wrap gap-x-4 gap-y-1">
                       <span>Check-in: {booking.checkIn}</span>
                       <span>Check-out: {booking.checkOut}</span>
                     </div>
@@ -445,7 +600,7 @@ export default function BookingCalendar() {
               ) : (
                 <div className="text-center py-12 text-gray-500">
                   <UserGroupIcon className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-                  <p className="text-lg">No bookings for this month</p>
+                  <p className="text-base sm:text-lg">No bookings for this month</p>
                   <p className="text-sm text-gray-400 mt-1">All dates are available for booking</p>
                 </div>
               )}
@@ -455,48 +610,48 @@ export default function BookingCalendar() {
       )}
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg shadow p-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+        <div className="bg-white rounded-lg shadow p-3 sm:p-4">
           <div className="flex items-center">
             <div className="p-2 bg-green-100 rounded-lg">
-              <CheckCircleIcon className="w-6 h-6 text-green-600" />
+              <CheckCircleIcon className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
             </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Confirmed</p>
-              <p className="text-2xl font-bold text-gray-900">12</p>
+            <div className="ml-3 sm:ml-4">
+              <p className="text-xs sm:text-sm font-medium text-gray-600">Confirmed</p>
+              <p className="text-xl sm:text-2xl font-bold text-gray-900">12</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow p-4">
+        <div className="bg-white rounded-lg shadow p-3 sm:p-4">
           <div className="flex items-center">
             <div className="p-2 bg-yellow-100 rounded-lg">
-              <ClockIcon className="w-6 h-6 text-yellow-600" />
+              <ClockIcon className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-600" />
             </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Pending</p>
-              <p className="text-2xl font-bold text-gray-900">3</p>
+            <div className="ml-3 sm:ml-4">
+              <p className="text-xs sm:text-sm font-medium text-gray-600">Pending</p>
+              <p className="text-xl sm:text-2xl font-bold text-gray-900">3</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow p-4">
+        <div className="bg-white rounded-lg shadow p-3 sm:p-4">
           <div className="flex items-center">
             <div className="p-2 bg-blue-100 rounded-lg">
-              <UserGroupIcon className="w-6 h-6 text-blue-600" />
+              <UserGroupIcon className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
             </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Occupancy</p>
-              <p className="text-2xl font-bold text-gray-900">68%</p>
+            <div className="ml-3 sm:ml-4">
+              <p className="text-xs sm:text-sm font-medium text-gray-600">Occupancy</p>
+              <p className="text-xl sm:text-2xl font-bold text-gray-900">68%</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow p-4">
+        <div className="bg-white rounded-lg shadow p-3 sm:p-4">
           <div className="flex items-center">
             <div className="p-2 bg-purple-100 rounded-lg">
-              <EyeIcon className="w-6 h-6 text-purple-600" />
+              <EyeIcon className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" />
             </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">This Month</p>
-              <p className="text-2xl font-bold text-gray-900">15</p>
+            <div className="ml-3 sm:ml-4">
+              <p className="text-xs sm:text-sm font-medium text-gray-600">This Month</p>
+              <p className="text-xl sm:text-2xl font-bold text-gray-900">15</p>
             </div>
           </div>
         </div>

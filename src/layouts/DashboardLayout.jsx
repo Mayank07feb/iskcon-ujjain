@@ -13,7 +13,8 @@ import RateCalendar from "../screens/dashboard/RateCalendar";
 import AnalyticsPage from "../screens/dashboard/AnalyticsPage";
 import UsersPage from "../screens/dashboard/UsersPage";
 import SettingsPage from "../screens/dashboard/SettingsPage";
-import FacilityBookingList from "../screens/dashboard/FacilityBookingList"; // Add this import
+import FacilityBookingList from "../screens/dashboard/FacilityBookingList";
+import RoomsManagement from "../screens/dashboard/RoomsManagement"; // Add this import
 
 export default function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -37,10 +38,11 @@ export default function DashboardLayout() {
             <Route path="bulk-booking" element={<BookBulkRoom />} />
             <Route path="booking-calendar" element={<BookingCalendar />} />
             <Route path="rate-calendar" element={<RateCalendar />} />
+            <Route path="rooms" element={<RoomsManagement />} /> {/* Add this route */}
             <Route path="analytics" element={<AnalyticsPage />} />
             <Route path="users" element={<UsersPage />} />
             <Route path="settings" element={<SettingsPage />} />
-            <Route path="facility-booking-list" element={<FacilityBookingList />} /> {/* Add this route */}
+            <Route path="facility-booking-list" element={<FacilityBookingList />} />
           </Routes>
         </main>
 

@@ -10,7 +10,8 @@ import {
   CalendarDaysIcon,
   UserGroupIcon,
   CurrencyRupeeIcon,
-  DocumentTextIcon, // Add this import
+  DocumentTextIcon,
+  BuildingStorefrontIcon, // Add this import for Rooms
 } from "@heroicons/react/24/outline";
 import logo from "../assets/logo.png";
 
@@ -23,8 +24,9 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen, logout }) {
     { label: "Bookings", path: "/dashboard/bookings", icon: <CalendarDaysIcon className="w-5 h-5" /> },
     { label: "Booking Calendar", path: "/dashboard/booking-calendar", icon: <CalendarDaysIcon className="w-5 h-5" /> },
     { label: "Rate Calendar", path: "/dashboard/rate-calendar", icon: <CurrencyRupeeIcon className="w-5 h-5" /> },
+    { label: "Rooms Management", path: "/dashboard/rooms", icon: <BuildingStorefrontIcon className="w-5 h-5" /> }, // Add this menu item
     { label: "Bulk Booking", path: "/dashboard/bulk-booking", icon: <UserGroupIcon className="w-5 h-5" /> },
-    { label: "Facility Booking List", path: "/dashboard/facility-booking-list", icon: <DocumentTextIcon className="w-5 h-5" /> }, // Add this menu item
+    { label: "Facility Booking List", path: "/dashboard/facility-booking-list", icon: <DocumentTextIcon className="w-5 h-5" /> },
     { label: "Analytics", path: "/dashboard/analytics", icon: <ChartBarIcon className="w-5 h-5" /> },
     { label: "Users", path: "/dashboard/users", icon: <UsersIcon className="w-5 h-5" /> },
     { label: "Settings", path: "/dashboard/settings", icon: <Cog6ToothIcon className="w-5 h-5" /> },
