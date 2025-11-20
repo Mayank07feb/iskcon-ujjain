@@ -11,6 +11,7 @@ import {
   UsersIcon,
   ArrowRightIcon,
 } from "@heroicons/react/24/outline";
+import CancelBookingPage from "../components/CancelBookingPage";
 
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -44,6 +45,7 @@ export default function HomePage() {
   });
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showCancelForm, setShowCancelForm] = useState(false);
 
   const heroImages = [
     "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&h=600&fit=crop",
@@ -1640,7 +1642,6 @@ export default function HomePage() {
                   Ujjain, Madhya Pradesh, 456010
                 </p>
               </div>
-
               <div className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8">
                 <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 flex items-center">
                   <PhoneIcon className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
@@ -1662,7 +1663,6 @@ export default function HomePage() {
                   </a>
                 </p>
               </div>
-
               <div className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 md:col-span-2">
                 <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 flex items-center">
                   <ClockIcon className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
@@ -1675,6 +1675,16 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+        {/* Floating Cancel Button */}
+        <button
+          onClick={() => setShowCancelForm(true)}
+          className="fixed bottom-6 right-6 z-50 bg-orange-600 hover:bg-orange-700 text-white font-semibold px-5 py-3 rounded-full shadow-xl transition-all"
+        >
+          Cancel Booking
+        </button>
+        {showCancelForm && (
+          <CancelBookingPage onClose={() => setShowCancelForm(false)} />
+        )}
       </main>
 
       {/* Footer */}
