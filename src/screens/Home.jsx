@@ -924,6 +924,22 @@ export default function HomePage() {
 
       {/* Hero Section Slider */}
       <header className="relative w-full h-screen max-h-[500px] sm:max-h-[600px] md:max-h-[700px] overflow-hidden">
+        {/* Cancel Booking Button - Top Right of Banner */}
+        <button
+          onClick={() => setShowCancelForm(true)}
+          className="absolute top-3 right-3 z-50 
+             bg-red hover:bg-red/90 text-white font-semibold 
+             px-3 py-1.5 text-xs          
+             sm:px-5 sm:py-2 sm:text-sm  
+             rounded-full shadow-xl transition-all"
+        >
+          Cancel Booking
+        </button>
+
+        {showCancelForm && (
+          <CancelBookingPage onClose={() => setShowCancelForm(false)} />
+        )}
+
         {heroImages.map((img, idx) => (
           <div
             key={idx}
@@ -1676,7 +1692,7 @@ export default function HomePage() {
           </div>
         </section>
         {/* Floating Cancel Button */}
-        <button
+        {/* <button
           onClick={() => setShowCancelForm(true)}
           className="fixed bottom-6 right-6 z-50 bg-orange-600 hover:bg-orange-700 text-white font-semibold px-5 py-3 rounded-full shadow-xl transition-all"
         >
@@ -1684,7 +1700,7 @@ export default function HomePage() {
         </button>
         {showCancelForm && (
           <CancelBookingPage onClose={() => setShowCancelForm(false)} />
-        )}
+        )} */}
       </main>
 
       {/* Footer */}
